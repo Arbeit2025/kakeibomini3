@@ -1,11 +1,12 @@
 from flask import Flask, request, redirect, url_for, flash, render_template_string
+import os
 import sqlite3
 from datetime import datetime, date
 
 app = Flask(__name__)
-app.secret_key = "dev-secret-key"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-DB_PATH = "kakeibo.db"
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "kakeibo.db")
 
 # ------------------------------
 # DB
@@ -232,4 +233,4 @@ def delete(entry_id):
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(debug=os.environ.get("FLASK_DEBUG") == "1")
